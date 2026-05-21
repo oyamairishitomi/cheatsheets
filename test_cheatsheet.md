@@ -224,6 +224,45 @@ for (const [word, n] of Object.entries(count)) {
 
 ---
 
+## 挿入ソート
+
+「手札に1枚ずつ加えて、そのたびに正しい位置に差し込む」イメージ。
+
+```
+入力例:
+4          ← lines[0]: 要素数N
+4 2 3 1    ← lines[1]: スペース区切りの数列
+```
+
+```js
+const N = Number(lines[0]);
+const parts = lines[1].split(' ').map(Number);
+
+for (let i = 1; i <= N; i++) {
+  let key = parts[i];   // 取り出す値
+  let j = i - 1;        // keyより左の位置から比較開始
+
+  while (j >= 0 && parts[j] > key) {
+    parts[j + 1] = parts[j];  // keyより大きければ1つ右にずらす
+    j--;
+  }
+
+  parts[j + 1] = key;  // 正しい位置に差し込む
+}
+console.log(parts.join(' '));
+```
+
+**よくあるバグ**
+
+| ミス | 正しい書き方 |
+|------|------|
+| `while(i >= 0 ...)` | `while(j >= 0 ...)` ← ループ変数は `j` |
+| `parts[j] = parts[j-1]` | `parts[j+1] = parts[j]` ← 右にずらす |
+| `i=<N` | `i<=N` ← 向きに注意 |
+| `for(i=1; ...)` | `for(let i=1; ...)` ← `let` を忘れずに |
+
+---
+
 ## よくあるミスまとめ
 
 | ミス | 原因 | 直し方 |

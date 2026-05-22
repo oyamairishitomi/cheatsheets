@@ -224,6 +224,51 @@ for (const [word, n] of Object.entries(count)) {
 
 ---
 
+## 重複を除く・種類数を数える（Set）
+
+```js
+const numbers = [3, 1, 4, 1, 5, 3];
+
+const s = new Set(numbers);
+s.size   // 4 ← 重複を除いた種類数（.length ではなく .size）
+```
+
+**「何種類あるか」を求めるパターン（要素が各行に1つずつ）**
+
+```
+5        ← lines[0]: 個数N
+3
+1
+4
+1
+5
+```
+
+```js
+const numbers = lines.slice(1).map(Number);
+console.log(new Set(numbers).size);
+```
+
+`lines.slice(1)` で `lines[0]`（個数）を除いた残り全部を切り出す。
+
+---
+
+## 配列の切り出し（slice）
+
+```js
+lines = ['5', '3', '1', '4', '1', '5']
+//        [0]   [1]  [2]  [3]  [4]  [5]
+
+lines.slice(1)      // ['3', '1', '4', '1', '5']  ← [1]以降全部
+lines.slice(1, 4)   // ['3', '1', '4']             ← [1]以上[4]未満
+```
+
+- `slice(n)` → n番目から最後まで
+- `slice(start, end)` → start以上 end**未満**（endは含まれない）
+- 元の配列は変わらず、新しい配列を返す
+
+---
+
 ## 挿入ソート
 
 「手札に1枚ずつ加えて、そのたびに正しい位置に差し込む」イメージ。
@@ -291,3 +336,8 @@ console.log(parts.join(' '));
 | ループ内で `Number(lines[i])` を何度も呼ぶ | 同じ変換を繰り返している | `let num = Number(lines[i])` と変数に入れて `num` を使い回す |
 | Yes/No をループ内の if-else で両方セットする | 一致しても次のループで `No` に上書きされる | `result = 'No'` を初期値にして、一致したら `result = 'Yes'; break;` |
 | ループ内で `parts[i]` を使う | `parts` は `lines[0]` の分割なので要素数が少ない | 各行の値は `Number(lines[i])` で取る |
+| `new Set(numbers).length` を使う | `Set` に `.length` はない | `.size` を使う |
+| `Set` をループの中で作る | 毎回上書きされる | ループの外で1回だけ作る |
+| `let numbers[i] += K` と書く | `let` は新変数の宣言なので `[i]` と組み合わせられない | `numbers[i] += K`（letなし）|
+| 全要素を操作後に `console.log(numbers)` で一括出力する | 出力が1行ずつ必要な問題では配列ごと出すとNG | ループ内で `console.log(numbers[i])` と1つずつ出力する |
+| 出力フォーマットを「答え合わせ」だとしか見ていない | 「期待する出力」はフォーマットの仕様書でもある | `B_1 / B_2`（改行区切り）→ 1行ずつ、`A B C`（スペース区切り）→ `join(' ')` と読み取る |
